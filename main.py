@@ -5,7 +5,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-jugadores = [
+usuarios = [
         {"id": 1, "nombre": "Duri"},
         {"id": 2, "nombre": "Cesar"},
         {"id": 3, "nombre": "Diego"},
@@ -13,17 +13,17 @@ jugadores = [
     ]
 
 @app.route('/api/usuarios', methods=['GET'])
-def obtener_jugadores():
-    return {"jugadores": jugadores}
+def obtener_usuarios():
+    return {"usuarios": usuarios}
 
 @app.route('/api/usuarios/<int:id>', methods=['GET'])
-def obtener_jugador_por_id(id):
-   for jugador in jugadores:
-        if jugador["id"] == id:
-            return jugador
+def obtener_usuario_por_id(id):
+   for usuario in usuarios:
+        if usuario["id"] == id:
+            return usuario
 
 @app.route('/api/usuarios/<nombre>', methods=['GET'])
-def obtener_jugador_por_nombre(nombre):
-    for jugador in jugadores:
-        if jugador["nombre"] == nombre:
-            return jugador
+def obtener_usuario_por_nombre(nombre):
+    for usuario in usuarios:
+        if usuario["nombre"] == nombre:
+            return usuario
