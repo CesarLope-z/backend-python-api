@@ -42,6 +42,14 @@ La API quedará disponible normalmente en `http://127.0.0.1:5000`.
 | `GET` | `/api/usuarios/<id>` | Devuelve el usuario cuyo identificador coincide con `id`. |
 | `GET` | `/api/usuarios/<nombre>` | Devuelve el usuario cuyo nombre coincide con `nombre`. |
 
+Cuando no se encuentra un usuario por identificador o por nombre, la API responde con el código `404` y el siguiente JSON:
+
+```json
+{
+  "error": "Usuario no encontrado"
+}
+```
+
 ### Ejemplos
 
 ```text
@@ -52,7 +60,10 @@ GET /api/usuarios/Cesar
 
 ## Próximos pasos sugeridos
 
-- Registrar Flask en `requirements.txt` para instalar las dependencias con un solo comando.
-- Responder con un error `404` cuando no exista un usuario solicitado.
-- Añadir operaciones para crear, actualizar y eliminar usuarios.
-- Sustituir la lista temporal por una base de datos y añadir pruebas automatizadas.
+La siguiente secuencia permite crecer la API sin añadir complejidad antes de tiempo:
+
+1. Registrar Flask y las futuras dependencias en `requirements.txt`.
+2. Sustituir la lista temporal por una base de datos (por ejemplo, SQLite para aprender y PostgreSQL para producción). Así los usuarios no se perderán al reiniciar el servidor.
+3. Añadir los métodos `POST`, `PUT`/`PATCH` y `DELETE` para crear, actualizar y eliminar usuarios persistentes.
+4. Validar los datos de entrada y añadir pruebas automatizadas para los endpoints.
+5. Cuando existan cuentas de usuario y rutas que deban protegerse, implementar autenticación con contraseñas almacenadas de forma segura y tokens JWT. El JWT tiene más sentido después de definir qué recursos requieren permisos y qué roles tendrá cada usuario.

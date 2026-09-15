@@ -18,12 +18,14 @@ def obtener_usuarios():
 
 @app.route('/api/usuarios/<int:id>', methods=['GET'])
 def obtener_usuario_por_id(id):
-   for usuario in usuarios:
+    for usuario in usuarios:
         if usuario["id"] == id:
             return usuario
+    return {"error": "Usuario no encontrado"}, 404
 
 @app.route('/api/usuarios/<nombre>', methods=['GET'])
 def obtener_usuario_por_nombre(nombre):
     for usuario in usuarios:
         if usuario["nombre"] == nombre:
             return usuario
+    return {"error": "Usuario no encontrado"}, 404
