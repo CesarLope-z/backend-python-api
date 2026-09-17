@@ -1,28 +1,21 @@
-﻿# Backend Python API
+# Backend Python API
 
-API REST inicial creada con **Flask** para consultar una lista de usuarios almacenada temporalmente en memoria.
+API REST creada con **Flask** para administrar jugadores almacenados en la tabla `jugadores` de Supabase.
 
 ## Estado actual
 
-Hasta ahora el proyecto cuenta con:
+La aplicación, definida en `main.py`, permite:
 
-- Una aplicación Flask definida en `main.py`.
-- Una colección inicial de cuatro usuarios (`id` y `nombre`).
-- Endpoints de solo lectura para consultar todos los usuarios, uno por identificador y uno por nombre.
-- Un `.gitignore` que evita incluir el archivo `.env` en el repositorio.
-
-Los datos aún no se guardan en una base de datos: se reinician cada vez que se detiene y vuelve a iniciar la aplicación.
+- Consultar todos los jugadores.
+- Crear jugadores con nombre y estilo.
+- Consultar un jugador por su identificador.
+- Eliminar un jugador por su identificador.
 
 ## Requisitos
 
 - Python 3
 - Flask
-
-Instala Flask con:
-
-```bash
-pip install flask
-```
+- Una conexión de Supabase configurada en `db.py`.
 
 ## Ejecutar el proyecto
 
@@ -38,32 +31,45 @@ La API quedará disponible normalmente en `http://127.0.0.1:5000`.
 
 | Método | Ruta | Descripción |
 | --- | --- | --- |
-| `GET` | `/api/usuarios` | Devuelve todos los usuarios. |
-| `GET` | `/api/usuarios/<id>` | Devuelve el usuario cuyo identificador coincide con `id`. |
-| `GET` | `/api/usuarios/<nombre>` | Devuelve el usuario cuyo nombre coincide con `nombre`. |
+| `GET` | `/api/jugadores` | Devuelve todos los jugadores. |
+| `POST` | `/api/jugadores` | Crea un jugador. |
+| `GET` | `/api/jugadores/<id>` | Devuelve el jugador cuyo identificador coincide con `id`. |
+| `DELETE` | `/api/jugadores/<id>` | Elimina el jugador cuyo identificador coincide con `id`. |
 
-Cuando no se encuentra un usuario por identificador o por nombre, la API responde con el código `404` y el siguiente JSON:
+### Crear un jugador
+
+La solicitud debe enviarse en formato JSON. El campo `nombre` es obligatorio y `estilo` es opcional.
 
 ```json
 {
-  "error": "Usuario no encontrado"
+  "nombre": "Cesar",
+  "estilo": "Ofensivo"
+}
+```
+
+Si no se proporciona `nombre`, la API responde con `400`:
+
+```json
+{
+  "error": "El campo 'nombre' es requerido"
+}
+```
+
+### Respuestas cuando no existe el jugador
+
+Las rutas de consulta y eliminación responden con `404` cuando el identificador no existe:
+
+```json
+{
+  "error": "Jugador no encontrado"
 }
 ```
 
 ### Ejemplos
 
 ```text
-GET /api/usuarios
-GET /api/usuarios/1
-GET /api/usuarios/Cesar
+GET /api/jugadores
+POST /api/jugadores
+GET /api/jugadores/1
+DELETE /api/jugadores/1
 ```
-
-## Próximos pasos sugeridos
-
-La siguiente secuencia permite crecer la API sin añadir complejidad antes de tiempo:
-
-1. Registrar Flask y las futuras dependencias en `requirements.txt`.
-2. Sustituir la lista temporal por una base de datos (por ejemplo, SQLite para aprender y PostgreSQL para producción). Así los usuarios no se perderán al reiniciar el servidor.
-3. Añadir los métodos `POST`, `PUT`/`PATCH` y `DELETE` para crear, actualizar y eliminar usuarios persistentes.
-4. Validar los datos de entrada y añadir pruebas automatizadas para los endpoints.
-5. Cuando existan cuentas de usuario y rutas que deban protegerse, implementar autenticación con contraseñas almacenadas de forma segura y tokens JWT. El JWT tiene más sentido después de definir qué recursos requieren permisos y qué roles tendrá cada usuario.
